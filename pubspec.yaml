@@ -38,6 +38,7 @@ dependencies:
   get: ^4.6.5
   image_picker: ^0.8.7+4
   io: ^1.0.4
+  video_player: ^2.6.1
 
 dev_dependencies:
   flutter_lints: ^2.0.0
