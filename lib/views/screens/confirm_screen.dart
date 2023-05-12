@@ -1,14 +1,20 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tiktok_clone/views/widget/text_input.dart';
+
 import 'package:video_player/video_player.dart';
+
+import '../../controllers/upload_video_controller.dart';
+
 class ConfirmScreen extends StatefulWidget {
-final File videoFile;
-
-  final String videoPath;
-
-  const ConfirmScreen({super.key, required this.videoFile, required this.videoPath});
+  final File videoFile;
+  final String? videoPath;
+  const ConfirmScreen({
+    Key? key,
+    required this.videoFile,
+    required this.videoPath,
+  }) : super(key: key);
 
   @override
   State<ConfirmScreen> createState() => _ConfirmScreenState();
@@ -16,15 +22,17 @@ final File videoFile;
 
 class _ConfirmScreenState extends State<ConfirmScreen> {
   late VideoPlayerController controller;
-  TextEditingController songController= TextEditingController();
-  TextEditingController captionController= TextEditingController();
+  TextEditingController _songController = TextEditingController();
+  TextEditingController _captionController = TextEditingController();
+
+  UploadVideoController uploadVideoController =
+      Get.put(UploadVideoController());
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {
-      controller=VideoPlayerController.file(widget.videoFile);
+      controller = VideoPlayerController.file(widget.videoFile);
     });
     controller.initialize();
     controller.play();
@@ -33,43 +41,77 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-     body: SingleChildScrollView(
-       child: Column(
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
           children: [
             const SizedBox(
               height: 30,
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width,
-              height:MediaQuery.of(context).size.height/1.5 ,
+              height: MediaQuery.of(context).size.height / 1.5,
               child: VideoPlayer(controller),
             ),
-            const SizedBox(height: 30,),
+            const SizedBox(
+              height: 30,
+            ),
             SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Container(
-                    margin:const EdgeInsets.symmetric(horizontal: 10) ,
-                    width: MediaQuery.of(context).size.width-20,
-                    child: TextInputField(controller: songController, lableText: 'Song Name', isObscure: false, icon:Icons.music_note),
+                    margin: const EdgeInsets.symmetric(horizontal: 10),
+                    width: MediaQuery.of(context).size.width - 20,
+                    child: TextInputField(
+                      controller: _songController,
+                      lableText: 'Song Name',
+                      icon: Icons.music_note,
+                      isObscure: false,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
                   ),
                   Container(
-                    margin:const EdgeInsets.symmetric(horizontal: 10) ,
-                    width: MediaQuery.of(context).size.width-20,
-                    child: TextInputField(controller: captionController, lableText: 'Caption', isObscure: false, icon:Icons.closed_caption),
+                    margin: const EdgeInsets.symmetric(horizontal: 10),
+                    width: MediaQuery.of(context).size.width - 20,
+                    child: TextInputField(
+                      controller: _captionController,
+                      lableText: 'Caption',
+                      icon: Icons.closed_caption,
+                      isObscure: false,
+                    ),
                   ),
-                  const SizedBox( height: 10,),
-                  ElevatedButton(onPressed: (){}, child: Text('Shere !', style: TextStyle(fontSize: 20,color: Colors.white),))
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ElevatedButton(
+                      onPressed: () => uploadVideoController.uploadVideo(
+                          _songController.text,
+                          _captionController.text,
+                          widget.videoPath!),
+                      child: const Text(
+                        'Share!',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                        ),
+                      ))
                 ],
               ),
             )
           ],
-       ),
-     ),
+        ),
+      ),
     );
   }
 }

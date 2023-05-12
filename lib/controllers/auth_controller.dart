@@ -17,6 +17,7 @@ class AuthController extends GetxController {
 late Rx<File?> _pickImage;
 
 File? get profilePhoto=> _pickImage.value;
+User get user=> _user.value!;
 
 @override
   void onReady() {
@@ -28,7 +29,7 @@ File? get profilePhoto=> _pickImage.value;
   }
   _setIntialScreen(User? user){
     if(user ==null){
-      Get.offAll(()=>LoginScreen());
+      Get.offAll(()=>SignupScreen());
 
     }else{
       Get.offAll(()=> const HomeScreen());
@@ -77,12 +78,12 @@ _pickImage=Rx<File?>(File(pickImage!.path));
           profilePhoto: downloadUrl,
           uid: cred.user!.uid,
         );
-       await firestore.collection('user').doc(cred.user!.uid).set(user.toJson());
+       await firestore.collection('users').doc(cred.user!.uid).set(user.toJson());
       }else{
         Get.snackbar('Error in creating an account','Please enter all the field');
       }
     } catch (e) {
-      Get.snackbar('Error in creating an account', e.toString());
+      Get.snackbar('Error in creating  account', e.toString());
     }
   }
   void loginUser(String email, String password)async{
@@ -98,6 +99,7 @@ _pickImage=Rx<File?>(File(pickImage!.path));
         
     }
     catch(e){
+      print(e.toString());
     Get.snackbar('Error in creating an account', e.toString());
     }
   }

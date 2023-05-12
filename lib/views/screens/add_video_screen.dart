@@ -27,11 +27,11 @@ showOptionDialog(BuildContext context){
       SimpleDialogOption(
         onPressed: ()=> pickVideo(ImageSource.gallery,context),
         child: Row(
-          children: [
+          children: const[
             Icon(Icons.image),
             Padding(
               
-              padding: const EdgeInsets.all(7.0),
+              padding:  EdgeInsets.all(7.0),
               child: Text('Gallery', style: TextStyle(fontSize: 20,),),
             )
           ],
@@ -40,11 +40,11 @@ showOptionDialog(BuildContext context){
       SimpleDialogOption(
         onPressed:()=> pickVideo(ImageSource.camera,context),
         child: Row(
-          children: [
+          children:const  [
             Icon(Icons.camera_alt),
             Padding(
               
-              padding: const EdgeInsets.all(7.0),
+              padding:  EdgeInsets.all(7.0),
               child: Text('Camera', style: TextStyle(fontSize: 20,),),
             )
           ],
@@ -53,11 +53,11 @@ showOptionDialog(BuildContext context){
       SimpleDialogOption(
         onPressed: ()=>Navigator.of(context).pop(),
         child: Row(
-          children: [
+          children: const  [
             Icon(Icons.cancel),
             Padding(
               
-              padding: const EdgeInsets.all(7.0),
+              padding:  EdgeInsets.all(7.0),
               child: Text('Cancel', style: TextStyle(fontSize: 20,),),
             )
           ],
