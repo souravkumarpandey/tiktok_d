@@ -103,4 +103,7 @@ _pickImage=Rx<File?>(File(pickImage!.path));
     Get.snackbar('Error in creating an account', e.toString());
     }
   }
+  void signOut() async {
+    await firebaseAuth.signOut();
+  }
 }
